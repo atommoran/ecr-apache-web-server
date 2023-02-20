@@ -9,6 +9,8 @@ CONTAINER_PORT=80
 
 IMAGE_VERSION="0.1"
 
+REPOSITORY_URI=$(jq -r '.Outputs[] | select(.OutputKey=="RepositoryUri") | .OutputValue' stack_descriptions/bootstrap_stack_description.json)
+
 # Builds the Docker image and tags it with latest version number.
 buildImage () {
     echo Building Image Version: $IMAGE_VERSION ...
@@ -25,6 +27,14 @@ runContainer () {
     echo Container started. Open browser at http://localhost:$HOST_PORT .
 }
 
+pushImage () {
+    docker tag $IMAGE_NAME:latest $REPOSITORY_URI:latest
+    docker tag $IMAGE_NAME:$IMAGE_VERSION $REPOSITORY_URI:$IMAGE_VERSION
+    aws ecr get-login-password | docker login --username AWS --password-stdin $REPOSITORY_URI
+    docker push $REPOSITORY_URI:latest
+    docker push $REPOSITORY_URI:$IMAGE_VERSION
+}
+
 # Shows the usage for the script.
 showUsage () {
     echo "Description:"
@@ -34,6 +44,7 @@ showUsage () {
     echo "    build: Builds a Docker image ('$IMAGE_NAME')."
     echo "    run-local: Runs a container based on an existing Docker image ('$IMAGE_NAME')."
     echo "    build-run: Builds a Docker image and runs the container."
+    echo "    push: Pushes image to ECR repository (must run './ecr-deploy.sh bootstrap' first)."
 }
 
 if [ $# -eq 0 ]; then
@@ -49,6 +60,9 @@ else
         "build-run")
             buildImage
             runContainer
+            ;;
+        "push")
+            pushImage
             ;;
         *)
             showUsage

@@ -1,0 +1,4 @@
+# All stack descriptions will be kept out of git
+*
+# But keeping this .gitignore to keep the folder in place
+!.gitignore

@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  EcrName:  
+    Type: String
+    Description: Name used for the ECR repository
+Resources:
+  WebServerImageRepository: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: !Ref EcrName
+      ImageScanningConfiguration: 
+        ScanOnPush: true
+Outputs:
+  RepositoryUri:
+    Description: The Uri for ECR repository, required to update image
+    Value: !GetAtt WebServerImageRepository.RepositoryUri
