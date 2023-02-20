@@ -8,15 +8,8 @@
         "ParameterValue": "REPLACE WITH YOUR VPC"
     },
     {
-        "ParameterKey": "VpcId",
-        "ParameterValue": "REPLACE WITH YOUR VPC"
-    },
-    {
         "ParameterKey": "SubnetId",
-        "ParameterValue": [
-            "YOUR SUBNETS HERE",
-            "YOUR SUBNETS HERE"
-        ]
+        "ParameterValue": "YOUR_SUBNET_HERE,YOUR_SUBNET_HERE"
     },
     {
         "ParameterKey": "EcsImageUri",
