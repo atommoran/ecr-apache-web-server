@@ -23,5 +23,6 @@
 * Fixed arm64 to x86 image issues by using docker buildx
 * Added .gitingore to hide changes to ecr-infra-configuration.json
 
-Still to do:
-* Make script to update image: build, push and then update the ECS service
+## 0.5 - Updating the ECS image
+* Added update-ecs to docker-run.sh to force new deployment of ECS (and so take on a new image)
+* Made a small chaneg to index.html and the version number to test the new deployment

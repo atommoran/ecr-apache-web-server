@@ -7,7 +7,7 @@ CONTAINER_NAME="apache-web-server_local"
 HOST_PORT=8080
 CONTAINER_PORT=80
 
-IMAGE_VERSION="0.1"
+IMAGE_VERSION="0.2"
 
 REPOSITORY_URI=$(jq -r '.Outputs[] | select(.OutputKey=="RepositoryUri") | .OutputValue' stack_descriptions/bootstrap_stack_description.json)
 
@@ -35,6 +35,16 @@ pushImage () {
     docker push $REPOSITORY_URI:$IMAGE_VERSION
 }
 
+updateEcs () {
+    cluster_name=$(jq -r '.Outputs[] | select(.OutputKey=="ecscluster") | .OutputValue' stack_descriptions/ecs_infra_stack_description.json)
+    service_name=$(jq -r '.Outputs[] | select(.OutputKey=="ecsservice") | .OutputValue' stack_descriptions/ecs_infra_stack_description.json)
+
+    aws ecs update-service \
+        --cluster $cluster_name \
+        --service $service_name \
+        --force-new-deployment
+}
+
 # Shows the usage for the script.
 showUsage () {
     echo "Description:"
@@ -45,6 +55,7 @@ showUsage () {
     echo "    run-local: Runs a container based on an existing Docker image ('$IMAGE_NAME')."
     echo "    build-run: Builds a Docker image and runs the container."
     echo "    push: Pushes image to ECR repository (must run './ecr-deploy.sh bootstrap' first)."
+    echo "    update-ecs: Forces new deployment for the ECS service to use new image."
 }
 
 if [ $# -eq 0 ]; then
@@ -63,6 +74,9 @@ else
             ;;
         "push")
             pushImage
+            ;;
+        "update-ecs")
+            updateEcs
             ;;
         *)
             showUsage
