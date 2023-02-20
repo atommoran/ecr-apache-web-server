@@ -14,7 +14,7 @@ REPOSITORY_URI=$(jq -r '.Outputs[] | select(.OutputKey=="RepositoryUri") | .Outp
 # Builds the Docker image and tags it with latest version number.
 buildImage () {
     echo Building Image Version: $IMAGE_VERSION ...
-    docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$IMAGE_VERSION ./
+    docker buildx build --platform=linux/amd64 -t $IMAGE_NAME:latest -t $IMAGE_NAME:$IMAGE_VERSION .
     echo Build complete.
 }
 

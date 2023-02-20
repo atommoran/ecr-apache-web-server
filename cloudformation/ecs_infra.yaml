@@ -344,6 +344,10 @@ Resources:
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
                 Resource: '*'
+      ManagedPolicyArns:
+        # https://aws.amazon.com/premiumsupport/knowledge-center/ecs-pull-container-error/
+        # "Note: The AWS managed policy AmazonEC2ContainerRegistryReadOnly provides the minimum permissions required to pull images."
+        - 'arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly'
   AutoscalingRole:
     Type: 'AWS::IAM::Role'
     Properties:

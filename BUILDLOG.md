@@ -17,7 +17,11 @@
 * Created the ecs_infra.yaml CloudFormation template, modifying an AWS Documentation example
 * Made configuration json file: ecr-infra-configuration.json
 
-Pushing this commit now to save the configuration file as is, next commit will:
-* Implement deployment commands in cfn-deploy.sh
-* Configure personal configuration, and add .gitignore to hide changes
+## 0.4 - Cloudformation deployment
+* Implemented deployment commands in cfn-deploy.sh to create, update and delete ECS stack
+* Granted ECR IAM permissions to EC2Role in EC2 infra stack, to pull image
+* Fixed arm64 to x86 image issues by using docker buildx
+* Added .gitingore to hide changes to ecr-infra-configuration.json
+
+Still to do:
 * Make script to update image: build, push and then update the ECS service
